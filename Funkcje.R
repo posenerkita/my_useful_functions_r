@@ -87,3 +87,48 @@ intersect <- function(l1, l2){
   return(xy=c(x, y))
 }
 
+mod_chi_info <- function(model){
+  modelChi <- model$null.deviance - model$deviance
+  
+  modelDF <- model$df.null - model$df.residual
+  
+  chi.prop <- 1 - pchisq(modelChi, modelDF)
+  cat("If bigger than 0.05 model is guessing not predicting\n", chi.prop)
+}
+
+logisticPseudoR2 <- function(LogModel) {
+  dev <- LogModel$deviance
+  nullDev <- LogModel$null.deviance
+  modelN <- length(LogModel$fitted.values)
+  R.l <- 1 - dev/nullDev
+  R.cs <- 1 - exp(-(nullDev - dev)/modelN)
+  R.n <- R.cs/(1 - (exp(-(nullDev/modelN))))
+  cat("Pseudo R^2 for logistic regression\n")
+  cat("Hosmer and Lemeshow R^2 ", round(R.l, 3), "\n")
+  cat("Cox and Snell R^2 ", round(R.cs, 3), "\n")
+  cat("Nagelkerke R^2 ", round(R.n, 3), "\n")
+}
+
+  
+  col_1 <- rep(trt1, each = length(trt2) * length(rep))
+  
+  col_2 <- rep(trt2, each = length(rep), times = length(trt1))
+  
+  col_3 <- rep(rep, times = length(trt1) * length(trt2))
+  
+  days.col <- as.character(days)
+  
+  df <- data.frame(col_1, col_2, col_3)
+  
+  df[,days.col] <- NA
+  
+  colnames(df)[c(4:(4+(length(days)-1)))] <- paste('D', colnames(df)[c(4:(4+(length(days)-1)))], sep = '.')
+  
+  print(df)
+  
+  require(xlsx)
+  
+  write.xlsx(df, "Germination_Table.xlsx")
+  
+  
+}
