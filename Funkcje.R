@@ -109,7 +109,7 @@ logisticPseudoR2 <- function(LogModel) {
   cat("Nagelkerke R^2 ", round(R.n, 3), "\n")
 }
 
-  
+germ_data_template <- function(trt1, trt2, rep, days) {
   col_1 <- rep(trt1, each = length(trt2) * length(rep))
   
   col_2 <- rep(trt2, each = length(rep), times = length(trt1))
